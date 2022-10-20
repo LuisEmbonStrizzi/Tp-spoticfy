@@ -19,6 +19,12 @@ const getAlbumes = (_, res) => {
             ...
         ]
     */
+
+    conn.query("SELECT * FROM albumes", (err, rows) => {
+        if(err) return res.status(404).json({message: "Ha ocurrido un error"})
+
+        res.json(rows)
+    })
 };
 
 const getAlbum = (req, res) => {

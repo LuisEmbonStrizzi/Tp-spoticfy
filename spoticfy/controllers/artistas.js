@@ -17,6 +17,11 @@ const getArtistas = (_, res) => {
             ...
         ]
     */
+    conn.query("SELECT * FROM artistas", (err, rows) => {
+        if(err) return res.status(404).json({message: "Ha ocurrido un error"})
+    
+        res.json(rows)
+    })
 };
 
 const getArtista = (req, res) => {
@@ -29,6 +34,7 @@ const getArtista = (req, res) => {
             "nombre": "Nombre del artista"
         }
     */
+   
 };
 
 const createArtista = (req, res) => {
