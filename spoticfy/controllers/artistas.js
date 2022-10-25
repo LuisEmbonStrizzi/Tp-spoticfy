@@ -18,7 +18,7 @@ const getArtistas = (_, res) => {
         ]
     */
     conn.query("SELECT * FROM artistas", (err, rows) => {
-        if(err) return res.status(404).json({message: "Ha ocurrido un error"})
+        if(err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
     
         res.json(rows)
     })
@@ -34,6 +34,14 @@ const getArtista = (req, res) => {
             "nombre": "Nombre del artista"
         }
     */
+
+    const id = parseInt(req.params.id)
+
+    conn.query("SELECT * FROM artistas WHERE id = ?", [id], (err, rows) => {
+        if(err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
+    
+        res.json(rows)
+    })
    
 };
 
@@ -46,6 +54,13 @@ const createArtista = (req, res) => {
             "nombre": "Nombre del artista",
         }
     */
+   const nombre = req.body.nombre
+
+   conn.query("INSERT INTO artistas (nombre) VALUES (?)", [nombre], (err, rows) => {
+    if(err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
+
+    res.json(rows)
+    })
 };
 
 const updateArtista = (req, res) => {
@@ -57,17 +72,38 @@ const updateArtista = (req, res) => {
             "nombre": "Nombre del artista"
         }
     */
+   const id = parseInt(req.params.id)
+   const nombre = req.body.nombre
+    
+   conn.query("UPDATE artistas SET nombre = ? WHERE id = ?", [nombre, id], (err, rows) => {
+    if(err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
+
+    res.json(rows)
+    })
+   
 };
 
 const deleteArtista = (req, res) => {
     // Completar con la consulta que elimina un artista
     // Recordar que los parámetros de una consulta DELETE se encuentran en req.params
+    const id = parseInt(req.params.id)
+
+    conn.query("DELETE FROM artistas WHERE id = ?", [id], (err, rows) => {
+        if(err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
+    
+        res.json(rows)
+    })
 };
 
 const getAlbumesByArtista = (req, res) => {
     // Completar con la consulta que devuelve las canciones de un artista 
     // Recordar que los parámetros de una consulta GET se encuentran en req.params
     // Deberían devolver los datos de la misma forma que getAlbumes
+    const id = parseInt(req.params.id);
+    conn.query("SELECT albumes.id, albumes.nombre, artistas.nombre AS nombre_artista FROM albumes INNER JOIN artistas ON albumes.artista = artistas.id WHERE albumes.artista = ?'", [id], (err, rows) => {
+        if (err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
+        res.json(rows);
+    })
 };
 
 const getCanionesByArtista = (req, res) => {
