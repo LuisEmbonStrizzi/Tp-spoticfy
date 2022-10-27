@@ -100,7 +100,7 @@ const getAlbumesByArtista = (req, res) => {
     // Recordar que los parámetros de una consulta GET se encuentran en req.params
     // Deberían devolver los datos de la misma forma que getAlbumes
     const id = parseInt(req.params.id);
-    conn.query("SELECT albumes.id, albumes.nombre, artistas.nombre AS nombre_artista FROM albumes INNER JOIN artistas ON albumes.artista = artistas.id WHERE albumes.artista = ?'", [id], (err, rows) => {
+    conn.query("SELECT artistas.id, albumes.nombre, artistas.nombre AS nombre_artista FROM albumes INNER JOIN artistas ON albumes.artista = artistas.id WHERE albumes.artista = ?", [id], (err, rows) => {
         if (err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
         res.json(rows);
     })
@@ -111,6 +111,11 @@ const getCanionesByArtista = (req, res) => {
     // (tener en cuenta que las canciones están asociadas a un álbum, y los álbumes a un artista)
     // Recordar que los parámetros de una consulta GET se encuentran en req.params
     // Deberían devolver los datos de la misma forma que getCanciones
+    const id = parseInt(req.params.id);
+    conn.query("SELECT canciones.id, canciones.nombre, artistas.id AS nombre_artista, albumes.id AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones INNER JOIN albumes ON canciones.album = albumes.id INNER JOIN artistas ON albumes.artista = artista.id WHERE artista.id = ?", [id], (err, rows) => {
+        if (err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
+        res.json(rows);
+    })
 };
 
 module.exports = {

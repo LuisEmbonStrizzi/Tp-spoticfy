@@ -20,7 +20,7 @@ const getAlbumes = (_, res) => {
         ]
     */
 
-    conn.query("SELECT * FROM albumes", (err, rows) => {
+    conn.query("SELECT id, nombre, artista AS nombre_artista FROM albumes", (err, rows) => {
         if(err) return res.status(404).json({message: "Ha ocurrido un error"})
 
         res.json(rows)

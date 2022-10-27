@@ -34,7 +34,7 @@ GET http://localhost:3000/albumes HTTP/1.1
 
 ### Obtener un album por id
 
-GET http://localhost:3000/albumes/1 HTTP/1.1
+GET http://localhost:3000/albumes/13 HTTP/1.1
 
 ### Crear un album
 
