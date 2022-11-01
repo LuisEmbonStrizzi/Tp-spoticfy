@@ -27,7 +27,7 @@ app.post("/artistas", artistas.createArtista)
 app.put("/artistas/:id", artistas.updateArtista)
 app.delete("/artistas/:id", artistas.deleteArtista)
 app.get("/artistas/:id/albumes", artistas.getAlbumesByArtista)
-app.get("/artistas/:id/canciones", artistas.getCanionesByArtista)
+app.get("/artistas/:id/canciones", artistas.getCancionesByArtista)
 
 
 // Albumes
@@ -37,6 +37,10 @@ app.get("/artistas/:id/canciones", artistas.getCanionesByArtista)
 // albumes.getAlbum;
 // ...
 
+app.get("/albumes", albumes.getAlbumes)
+app.get("/albumes/:id", albumes.getAlbum)
+app.post("/albumes", albumes.createAlbum)
+app.get("/albumes", albumes.getAlbumes)
 app.get("/albumes", albumes.getAlbumes)
 
 // Canciones

@@ -20,8 +20,8 @@ const getAlbumes = (_, res) => {
         ]
     */
 
-    conn.query("SELECT id, nombre, artista AS nombre_artista FROM albumes", (err, rows) => {
-        if(err) return res.status(404).json({message: "Ha ocurrido un error"})
+    conn.query("SELECT albumes.id, albumes.nombre, artistas.nombre AS nombre_artista FROM albumes INNER JOIN artistas ON albumes.artista = artistas.id", (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
 
         res.json(rows)
     })
@@ -38,6 +38,12 @@ const getAlbum = (req, res) => {
             "nombre_artista": "Nombre del artista"
         }
     */
+    const id = req.params.id
+    conn.query("SELECT albumes.id, albumes.nombre, artistas.nombre AS nombre_artista FROM albumes INNER JOIN artistas ON albumes.artista = artistas.id WHERE albumes.id = ?", [id], (err, rows) => {
+        if(err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
+    
+        res.json(rows)
+    })
 };
 
 const createAlbum = (req, res) => {
@@ -50,6 +56,14 @@ const createAlbum = (req, res) => {
             "artista": "Id del artista"
         }
     */
+   const nombre = req.body.nombre
+   const artista = req.body.artista
+
+   conn.query("INSERT INTO albumes (nombre, artista) VALUES (?,?)", [nombre, artista], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
+
+    res.json({message: "Album creado correctamente"})
+})
 };
 
 const updateAlbum = (req, res) => {
