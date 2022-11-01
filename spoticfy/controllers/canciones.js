@@ -25,6 +25,11 @@ const getCanciones = (_, res) => {
             ...
         ]
     */
+    conn.query("SELECT canciones.id, canciones.nombre, artistas.nombre AS nombre_artista, albumes.nombre AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones LEFT JOIN albumes ON albumes.id = canciones.album LEFT JOIN artistas ON artistas.id = albumes.artista", (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
+    
+        res.json(rows)
+    })
 };
 
 const getCancion = (req, res) => {
@@ -41,6 +46,13 @@ const getCancion = (req, res) => {
             "reproducciones": "Reproducciones de la canción"
         }
     */
+    const id = parseInt(req.params.id);
+
+    conn.query("SELECT canciones.id, canciones.nombre, artistas.nombre AS nombre_artista, albumes.nombre AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones INNER JOIN albumes ON albumes.id = canciones.album INNER JOIN artistas ON artistas.id = albumes.artista WHERE canciones.id = ?",[id], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"});
+        
+        res.json(rows);
+    });
 };
 
 const createCancion = (req, res) => {
@@ -56,6 +68,13 @@ const createCancion = (req, res) => {
         }
     */
     // (Reproducciones se inicializa en 0)
+    const { nombre, album, duracion } = req.body;
+
+    conn.query("INSERT INTO canciones (nombre, album, duracion) VALUES (?, ?, ?) ",[nombre, album, duracion], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"});
+        
+        res.json({message: "Se ha creado una canción correctamente"});
+    });
 };
 
 const updateCancion = (req, res) => {

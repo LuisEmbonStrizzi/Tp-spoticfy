@@ -43,7 +43,7 @@ Content-Type: application/json
 
 {
   "nombre": "Album 2",
-  "artista": 3,
+  "artista": 3
 }
 
 ### Actualizar un album

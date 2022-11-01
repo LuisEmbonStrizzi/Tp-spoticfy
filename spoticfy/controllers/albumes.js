@@ -38,7 +38,7 @@ const getAlbum = (req, res) => {
             "nombre_artista": "Nombre del artista"
         }
     */
-    const id = req.params.id
+    const id = parseInt(req.params.id)
     conn.query("SELECT albumes.id, albumes.nombre, artistas.nombre AS nombre_artista FROM albumes INNER JOIN artistas ON albumes.artista = artistas.id WHERE albumes.id = ?", [id], (err, rows) => {
         if(err) return res.status(404).json({message: "El usuario no ha sido encontrado"})
     
@@ -76,17 +76,44 @@ const updateAlbum = (req, res) => {
             "artista": "Id del artista"
         }
     */
-};
+    const id = parseInt(req.params.id)
+    const nombre = req.body.nombre
+    const artista = req.body.artista
+
+    
+    conn.query("UPDATE albumes SET nombre = ?, artista = ? WHERE id = ?", [nombre, artista, id], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
+
+        res.json({message: "Album actualizado correctamente"})
+    })
+   
+}
 
 const deleteAlbum = (req, res) => {
+    
     // Completar con la consulta que elimina un album
     // Recordar que los parámetros de una consulta DELETE se encuentran en req.params
+
+    const id = parseInt(req.params.id)
+
+    conn.query("DELETE albumes, canciones FROM albumes INNER JOIN canciones ON canciones.album = albumes.id WHERE albumes.id = ?", [id], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
+    
+        res.json({message: "Album eliminado correctamente"})
+    })
 };
 
 const getCancionesByAlbum = (req, res) => {
     // Completar con la consulta que devuelve las canciones de un album
     // Recordar que los parámetros de una consulta GET se encuentran en req.params
     // Deberían devolver los datos de la misma forma que getCanciones
+    const id = parseInt(req.params.id)
+
+    conn.query("SELECT canciones.id, canciones.nombre, artistas.nombre AS nombre_artista, albumes.nombre AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones INNER JOIN albumes ON albumes.id = canciones.album INNER JOIN artistas ON artistas.id = albumes.artista WHERE albumes.id = ?", [id], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
+    
+        res.json(rows)
+    })
 };
 
 module.exports = {
