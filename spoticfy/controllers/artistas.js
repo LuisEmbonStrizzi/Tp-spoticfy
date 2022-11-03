@@ -88,10 +88,10 @@ const deleteArtista = (req, res) => {
     // Recordar que los parámetros de una consulta DELETE se encuentran en req.params
     const id = parseInt(req.params.id)
 
-    conn.query("DELETE FROM artistas WHERE id = ?", [id], (err, rows) => {
+    conn.query("DELETE artistas, albumes, canciones FROM albumes INNER JOIN canciones ON canciones.album = albumes.id  INNER JOIN artistas ON artistas.id = albumes.artista WHERE artistas.id = ?", [id], (err, rows) => {
         if(err) return res.status(500).json({message: "Ha ocurrido un error"})
     
-        res.json(rows)
+        res.json({message: "Artista eliminado correctamente"})
     })
 };
 

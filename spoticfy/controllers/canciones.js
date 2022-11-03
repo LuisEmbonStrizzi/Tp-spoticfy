@@ -25,7 +25,7 @@ const getCanciones = (_, res) => {
             ...
         ]
     */
-    conn.query("SELECT canciones.id, canciones.nombre, artistas.nombre AS nombre_artista, albumes.nombre AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones LEFT JOIN albumes ON albumes.id = canciones.album LEFT JOIN artistas ON artistas.id = albumes.artista", (err, rows) => {
+    conn.query("SELECT canciones.id, canciones.nombre, artistas.nombre AS nombre_artista, albumes.nombre AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones INNER JOIN albumes ON albumes.id = canciones.album INNER JOIN artistas ON artistas.id = albumes.artista", (err, rows) => {
         if(err) return res.status(500).json({message: "Ha ocurrido un error"})
     
         res.json(rows)
@@ -70,7 +70,7 @@ const createCancion = (req, res) => {
     // (Reproducciones se inicializa en 0)
     const { nombre, album, duracion } = req.body;
 
-    conn.query("INSERT INTO canciones (nombre, album, duracion) VALUES (?, ?, ?) ",[nombre, album, duracion], (err, rows) => {
+    conn.query("INSERT INTO canciones (nombre, album, duracion, reproducciones) VALUES (?, ?, ?, 0) ",[nombre, album, duracion], (err, rows) => {
         if(err) return res.status(500).json({message: "Ha ocurrido un error"});
         
         res.json({message: "Se ha creado una canción correctamente"});
@@ -90,16 +90,40 @@ const updateCancion = (req, res) => {
         }
     */
     // (Reproducciones no se puede modificar con esta consulta)
+    const { nombre, album, duracion } = req.body;
+    const id = parseInt(req.params.id)
+
+    conn.query("UPDATE canciones SET nombre = ?, album = ?, duracion = ? WHERE id = ?",[nombre, album, duracion, id], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"});
+        
+        res.json({message: "Se ha actualizado una canción correctamente"});
+    });
 };
 
 const deleteCancion = (req, res) => {
     // Completar con la consulta que elimina una canción
     // Recordar que los parámetros de una consulta DELETE se encuentran en req.params
+    const id = parseInt(req.params.id)
+
+    conn.query("DELETE FROM canciones WHERE id = ?", [id], (err, rows) => {
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
+    
+        res.json(rows)
+    })
+
 };
 
 const reproducirCancion = (req, res) => {
     // Completar con la consulta que aumenta las reproducciones de una canción
     // En este caso es una consulta PUT, pero no recibe ningún parámetro en el body, solo en los params
+    const id = parseInt(req.params.id)
+
+    conn.query("UPDATE canciones SET reproducciones = reproducciones + 1 WHERE id = ?",[id], (err, rows) => {
+        console.log(err)
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"});
+        
+        res.json({message: "Se ha reproducido una canción correctamente"});
+    });
 };
 
 module.exports = {

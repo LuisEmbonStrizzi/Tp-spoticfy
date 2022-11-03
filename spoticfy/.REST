@@ -26,7 +26,7 @@ Content-Type: application/json
 
 ### Eliminar un artista
 
-DELETE http://localhost:3000/artistas/2 HTTP/1.1
+DELETE http://localhost:3000/artistas/1 HTTP/1.1
 
 ### Obtener albumes
 
@@ -34,7 +34,7 @@ GET http://localhost:3000/albumes HTTP/1.1
 
 ### Obtener un album por id
 
-GET http://localhost:3000/albumes/13 HTTP/1.1
+GET http://localhost:3000/albumes/3 HTTP/1.1
 
 ### Crear un album
 
@@ -92,11 +92,11 @@ Content-Type: application/json
 
 ### Eliminar una cancion
 
-DELETE http://localhost:3000/canciones/3 HTTP/1.1
+DELETE http://localhost:3000/canciones/4 HTTP/1.1
 
 ### Reproducir una cancion
 
-GET http://localhost:3000/canciones/1/reproducir HTTP/1.1
+PUT http://localhost:3000/canciones/1/reproducir HTTP/1.1
 
 ### Obtener canciones de un album
 
