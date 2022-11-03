@@ -96,7 +96,7 @@ const deleteAlbum = (req, res) => {
 
     const id = parseInt(req.params.id)
 
-    conn.query("DELETE albumes, canciones FROM albumes INNER JOIN canciones ON canciones.album = albumes.id WHERE albumes.id = ?", [id], (err, rows) => {
+    conn.query("DELETE FROM albumes WHERE id = ?", [id], (err, rows) => {
         if(err) return res.status(500).json({message: "Ha ocurrido un error"})
     
         res.json({message: "Album eliminado correctamente"})

@@ -26,6 +26,7 @@ const getCanciones = (_, res) => {
         ]
     */
     conn.query("SELECT canciones.id, canciones.nombre, artistas.nombre AS nombre_artista, albumes.nombre AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones INNER JOIN albumes ON albumes.id = canciones.album INNER JOIN artistas ON artistas.id = albumes.artista", (err, rows) => {
+        
         if(err) return res.status(500).json({message: "Ha ocurrido un error"})
     
         res.json(rows)
@@ -49,6 +50,7 @@ const getCancion = (req, res) => {
     const id = parseInt(req.params.id);
 
     conn.query("SELECT canciones.id, canciones.nombre, artistas.nombre AS nombre_artista, albumes.nombre AS nombre_album, canciones.duracion, canciones.reproducciones FROM canciones INNER JOIN albumes ON albumes.id = canciones.album INNER JOIN artistas ON artistas.id = albumes.artista WHERE canciones.id = ?",[id], (err, rows) => {
+        
         if(err) return res.status(500).json({message: "Ha ocurrido un error"});
         
         res.json(rows);
@@ -71,6 +73,7 @@ const createCancion = (req, res) => {
     const { nombre, album, duracion } = req.body;
 
     conn.query("INSERT INTO canciones (nombre, album, duracion, reproducciones) VALUES (?, ?, ?, 0) ",[nombre, album, duracion], (err, rows) => {
+        
         if(err) return res.status(500).json({message: "Ha ocurrido un error"});
         
         res.json({message: "Se ha creado una canción correctamente"});
@@ -106,9 +109,9 @@ const deleteCancion = (req, res) => {
     const id = parseInt(req.params.id)
 
     conn.query("DELETE FROM canciones WHERE id = ?", [id], (err, rows) => {
-        if(err) return res.status(500).json({message: "Ha ocurrido un error"})
+        if(err) return res.status(500).json({message: "Ha ocurrido un error"});
     
-        res.json(rows)
+        res.sendStatus(204);
     })
 
 };
